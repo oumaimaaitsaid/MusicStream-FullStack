@@ -19,6 +19,11 @@ export const trackReducer = createReducer(
 
   on(TrackActions.loadTracks, state => ({ ...state, loading: true })),
 
+  on(TrackActions.loadTracksSuccess, (state, { tracks }) => ({
+    ...state,
+    tracks,
+    loading: false
+  })),
 
 
 );
