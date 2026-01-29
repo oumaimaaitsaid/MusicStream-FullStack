@@ -13,3 +13,12 @@ export const initialState: TrackState = {
   loading: false,
   error: null
 };
+
+export const trackReducer = createReducer(
+  initialState,
+
+  on(TrackActions.loadTracks, state => ({ ...state, loading: true })),
+
+
+
+);
