@@ -1,0 +1,67 @@
+<div class="min-h-screen bg-gradient-to-b from-indigo-900/40 to-black p-8 text-white" *ngIf="track()">
+  <header class="mb-8">
+    <button routerLink="/library"
+            class="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors font-medium">
+      <span class="text-xl">←</span> Retour à la Bibliothèque
+    </button>
+  </header>
+
+  <div class="flex flex-col md:flex-row gap-8 items-end animate-in fade-in duration-700">
+    <div class="w-64 h-64 md:w-80 md:h-80 bg-zinc-800 rounded-2xl shadow-2xl flex items-center justify-center text-8xl shadow-indigo-500/20">
+      🎵
+    </div>
+
+    <div class="flex-1">
+      <p class="text-sm uppercase tracking-widest font-bold text-indigo-400 mb-2">Chanson</p>
+      <h1 class="text-5xl md:text-7xl font-black mb-4 tracking-tighter">
+        {{ track()?.title }}
+      </h1>
+
+      <div class="flex items-center gap-2 mb-6">
+        <div class="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center text-xs">👤</div>
+        <h2 class="text-xl font-semibold hover:underline cursor-pointer tracking-tight text-zinc-200">
+          {{ track()?.artist }}
+        </h2>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button (click)="player.play(track()!)"
+                class="bg-indigo-600 hover:bg-indigo-500 hover:scale-105 transition-all text-white px-8 py-4 rounded-full font-bold text-lg flex items-center gap-3 shadow-lg shadow-indigo-600/20">
+          <span class="text-2xl">▶</span> Lire cette chanson
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <div class="lg:col-span-2 space-y-8">
+      <div class="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800 backdrop-blur-sm">
+        <h4 class="text-zinc-400 text-sm font-bold uppercase mb-4 tracking-wider">Description</h4>
+        <p class="text-zinc-300 leading-relaxed text-lg italic">
+          "{{ track()?.description || 'Aucune description disponible pour ce titre.' }}"
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-zinc-900/30 p-6 rounded-xl border border-zinc-800/50 h-fit">
+      <h4 class="text-zinc-400 text-sm font-bold uppercase mb-6 tracking-wider">Détails</h4>
+
+      <div class="space-y-4">
+        <div class="flex justify-between border-b border-zinc-800 pb-2">
+          <span class="text-zinc-500">Catégorie</span>
+          <span class="text-indigo-400 font-medium">{{ track()?.category }}</span>
+        </div>
+        <div class="flex justify-between border-b border-zinc-800 pb-2">
+          <span class="text-zinc-500">Ajouté le</span>
+          <span class="text-zinc-300">{{ track()?.addedDate | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-zinc-500">Durée</span>
+          <span class="text-zinc-300">{{ track()?.duration || '0:00' }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

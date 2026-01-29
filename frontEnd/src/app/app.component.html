@@ -1,0 +1,47 @@
+<div class="flex h-screen bg-black text-white font-sans overflow-hidden">
+
+  <nav class="w-64 bg-zinc-950 flex flex-col border-r border-zinc-800 hidden md:flex">
+    <div class="p-6">
+      <h2 class="text-2xl font-bold tracking-tighter text-indigo-500">MusicStream</h2>
+    </div>
+
+    <div class="flex flex-col gap-2 px-4 mt-4">
+      <a routerLink="/library"
+         routerLinkActive="bg-zinc-800 text-white"
+         class="flex items-center gap-4 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all group">
+        <span class="text-xl group-hover:scale-110 transition-transform">🏠</span>
+        <span class="font-medium">Bibliothèque</span>
+      </a>
+
+      <a routerLink="/add"
+         routerLinkActive="bg-zinc-800 text-white"
+         class="flex items-center gap-4 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all group">
+        <span class="text-xl group-hover:scale-110 transition-transform">➕</span>
+        <span class="font-medium">Ajouter Musique</span>
+      </a>
+    </div>
+
+    <div class="mt-8 px-8 flex flex-col gap-3">
+      <p class="text-xs uppercase tracking-widest text-zinc-500 font-semibold">Vos Playlists</p>
+      <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Favoris</a>
+      <a href="#" class="text-sm text-zinc-400 hover:text-white transition-colors">Mix Années 90</a>
+    </div>
+  </nav>
+
+  <main class="flex-1 flex flex-col relative overflow-y-auto bg-gradient-to-b from-zinc-900 to-black">
+    <header class="sticky top-0 z-10 bg-zinc-900/50 backdrop-blur-md p-4 flex justify-end">
+      <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold cursor-pointer">
+        JD
+      </div>
+    </header>
+
+    <div class="p-8">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <footer class="fixed bottom-0 w-full h-24 bg-black/90 border-t border-zinc-800 backdrop-blur-xl px-4 z-20">
+    <app-player></app-player>
+  </footer>
+
+</div>

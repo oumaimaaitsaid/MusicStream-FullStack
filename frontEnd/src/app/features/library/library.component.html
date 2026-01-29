@@ -1,0 +1,74 @@
+<div class="p-6 md:p-10 pb-32 min-h-screen bg-black text-white">
+
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+    <div>
+      <h1 class="text-3xl font-black tracking-tight italic uppercase text-indigo-500">Ma Bibliothèque</h1>
+      <p class="text-zinc-500 text-sm">Gérez vos morceaux et playlists préférés.</p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+      <div class="relative flex-1 sm:w-80">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">🔍</span>
+        <input #search (input)="0"
+               placeholder="Rechercher titre ou artiste..."
+               class="w-full bg-zinc-900 border border-zinc-800 text-white rounded-xl py-3 px-10 outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+      </div>
+
+      <select #cat (change)="0"
+              class="bg-zinc-900 border border-zinc-800 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer appearance-none">
+        <option value="all">Toutes les catégories</option>
+        <option value="pop">Pop</option>
+        <option value="rap">Rap</option>
+        <option value="rock">Rock</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+
+    <div *ngFor="let track of trackService.tracks() | filterTracks:search.value:cat.value"
+         class="group bg-zinc-900/40 border border-zinc-800/50 p-5 rounded-2xl hover:bg-zinc-800/80 transition-all duration-300 relative shadow-lg">
+
+      <div class="aspect-square bg-gradient-to-br from-zinc-700 to-zinc-900 rounded-xl mb-4 flex items-center justify-center text-5xl relative overflow-hidden">
+        🎵
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <button (click)="player.play(track)"
+                  class="bg-indigo-500 hover:bg-indigo-400 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-300">
+            <span class="text-2xl ml-1">▶</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="font-bold text-lg text-white truncate group-hover:text-indigo-400 transition-colors">
+          {{ track.title }}
+        </h3>
+        <div class="flex items-center justify-between mt-1 text-sm text-zinc-400">
+          <span class="truncate">{{ track.artist }}</span>
+          <span class="bg-zinc-800 px-2 py-0.5 rounded text-[10px] uppercase font-bold text-zinc-500">
+            {{ track.category }}
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 pt-4 border-t border-zinc-800/60">
+        <button (click)="onEdit(track)"
+                class="flex-1 bg-zinc-800 hover:bg-blue-600/20 hover:text-blue-400 text-zinc-300 py-2 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1">
+          ✏️ Modifier
+        </button>
+        <button (click)="trackService.deleteTrack(track.id)"
+                class="w-10 h-10 bg-zinc-800 hover:bg-red-600/20 hover:text-red-500 text-zinc-300 rounded-lg flex items-center justify-center transition-all">
+          🗑
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="(trackService.tracks() | filterTracks:search.value:cat.value).length === 0"
+       class="text-center py-40 bg-zinc-900/20 rounded-3xl border-2 border-dashed border-zinc-800">
+    <p class="text-zinc-500 text-lg">Humm, on n'a rien trouvé pour cette recherche. 🎧</p>
+  </div>
+
+</div>
