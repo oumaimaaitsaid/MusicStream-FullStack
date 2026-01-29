@@ -25,5 +25,9 @@ export const trackReducer = createReducer(
     loading: false
   })),
 
-
+  on(TrackActions.loadTracksFailure, (state, { error }) => ({
+    ...state,
+    error,
+    loading: false
+  }))
 );
