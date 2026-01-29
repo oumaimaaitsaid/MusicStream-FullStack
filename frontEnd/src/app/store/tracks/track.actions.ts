@@ -7,3 +7,8 @@ export const loadTracksSuccess = createAction(
   '[Track] Load Tracks Success',
   props<{ tracks: Track[] }>()
 );
+
+export const loadTracksFailure = createAction(
+  '[Track] Load Tracks Failure',
+  props<{ error: any }>()
+);
