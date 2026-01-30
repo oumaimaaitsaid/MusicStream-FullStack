@@ -24,13 +24,18 @@ export class LibraryComponent implements OnInit {
     this.store.dispatch(TrackActions.loadTracks());
   }
    onEdit(track: Track) {
-  const newTitle = prompt("Nouveau titre :", track.title);
-  if (newTitle) {
-    const updatedTrack = { ...track, title: newTitle };
+     const newTitle = prompt("Nouveau titre :", track.title);
+     const newArtist = prompt("Nouvel artiste :", track.artist);
 
-  }
-}
-onDelete(id :string){
+     if (newTitle && newArtist) {
+       const updatedData = { ...track, title: newTitle, artist: newArtist };
+       this.store.dispatch(TrackActions.updateTrack({ id: track.id, trackData: updatedData }));
+     }
+   }
 
-  }
+   onDelete(id: string) {
+     if (confirm('Voulez-vous vraiment supprimer ce morceau ?')) {
+       this.store.dispatch(TrackActions.deleteTrack({ id }));
+     }
+   }
 }
