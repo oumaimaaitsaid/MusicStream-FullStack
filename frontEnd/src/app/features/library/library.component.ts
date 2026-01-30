@@ -31,5 +31,6 @@ onEdit(track: Track) {
   }
 }
 onDelete(id :string){
+
   }
 }

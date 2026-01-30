@@ -10,10 +10,9 @@ export class TrackService {
   tracks = signal<Track[]>([]);
   status = signal<'loading' | 'error' | 'success'>('success');
 
-  loadTracks() {
-    this.http.get<Track[]>(this.API_URL).subscribe(data => this.tracks.set(data));
-  }
-
+loadTracks() {
+  return this.http.get<Track[]>(this.API_URL);
+}
   addTrack(track: Track) {
     const formData = new FormData();
     formData.append('file', track.blob);

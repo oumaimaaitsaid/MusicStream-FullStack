@@ -24,9 +24,8 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-
-    <div *ngFor="let track of trackService.tracks() | filterTracks:search.value:cat.value"
+  <div *ngIf="tracks$ | async as tracksList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+    <div *ngFor="let track of tracksList | filterTracks:search.value:cat.value"
          class="group bg-zinc-900/40 border border-zinc-800/50 p-5 rounded-2xl hover:bg-zinc-800/80 transition-all duration-300 relative shadow-lg">
 
       <div class="aspect-square bg-gradient-to-br from-zinc-700 to-zinc-900 rounded-xl mb-4 flex items-center justify-center text-5xl relative overflow-hidden">
@@ -56,7 +55,7 @@
                 class="flex-1 bg-zinc-800 hover:bg-blue-600/20 hover:text-blue-400 text-zinc-300 py-2 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1">
           ✏️ Modifier
         </button>
-        <button (click)="trackService.deleteTrack(track.id)"
+        <button (click)="onDelete(track.id)"
                 class="w-10 h-10 bg-zinc-800 hover:bg-red-600/20 hover:text-red-500 text-zinc-300 rounded-lg flex items-center justify-center transition-all">
           🗑
         </button>
@@ -66,7 +65,7 @@
 
   </div>
 
-  <div *ngIf="(trackService.tracks() | filterTracks:search.value:cat.value).length === 0"
+  <div *ngIf="((tracks$ |async) || [] | filterTracks:search.value:cat.value).length === 0"
        class="text-center py-40 bg-zinc-900/20 rounded-3xl border-2 border-dashed border-zinc-800">
     <p class="text-zinc-500 text-lg">Humm, on n'a rien trouvé pour cette recherche. 🎧</p>
   </div>

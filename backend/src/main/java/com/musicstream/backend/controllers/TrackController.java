@@ -42,4 +42,16 @@ public class TrackController {
         trackService.deleteTrack(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Track> updateTrack(
+            @PathVariable String id,
+            @RequestParam("title") String title,
+            @RequestParam("artist") String artist,
+            @RequestParam("category") String category,
+            @RequestParam("description") String description) {
+
+        Track updated = trackService.updateTrack(id, title, artist, category, description);
+        return ResponseEntity.ok(updated);
+    }
 }
