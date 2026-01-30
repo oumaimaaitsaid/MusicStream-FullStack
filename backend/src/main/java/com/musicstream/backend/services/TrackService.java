@@ -38,6 +38,17 @@ public class TrackService {
         return trackRepository.findAll();
     }
 
+    public Track updateTrack(String id, String title, String artist, String category, String description) {
+        Track track = trackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Track not found"));
+
+        track.setTitle(title);
+        track.setArtist(artist);
+        track.setCategory(category);
+        track.setDescription(description);
+
+        return trackRepository.save(track);
+    }
     public void deleteTrack(String id) {
         trackRepository.deleteById(id);
     }
