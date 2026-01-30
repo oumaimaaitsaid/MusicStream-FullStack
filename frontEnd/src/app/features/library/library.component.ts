@@ -23,7 +23,7 @@ export class LibraryComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(TrackActions.loadTracks());
   }
-onEdit(track: Track) {
+   onEdit(track: Track) {
   const newTitle = prompt("Nouveau titre :", track.title);
   if (newTitle) {
     const updatedTrack = { ...track, title: newTitle };
