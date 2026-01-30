@@ -14,11 +14,33 @@ export class TrackEffects {
     this.actions$.pipe(
       ofType(TrackActions.loadTracks),
       mergeMap(() =>
-        this.trackService.loadTracks().pipe( // Khass t-koun loadTracks()
+        this.trackService.loadTracks().pipe(
           map((tracks: Track[]) => TrackActions.loadTracksSuccess({ tracks })), // Zid : Track[]
           catchError(error => of(TrackActions.loadTracksFailure({ error })))
         )
       )
     )
   );
+updateTrack$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(TrackActions.updateTrack),
+    mergeMap(action =>
+      this.trackService.updateTrack(action.id, action.trackData).pipe(
+        map(track => TrackActions.updateTrackSuccess({ track })),
+        catchError(error => of(TrackActions.loadTracksFailure({ error })))
+      )
+    )
+  )
+);
+deleteTrack$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(TrackActions.deleteTrack),
+    mergeMap(action =>
+      this.trackService.deleteTrack(action.id).pipe(
+        map(() => TrackActions.deleteTrackSuccess({ id: action.id })),
+        catchError(error => of(TrackActions.loadTracksFailure({ error })))
+      )
+    )
+  )
+);
 }
