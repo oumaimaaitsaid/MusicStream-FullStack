@@ -1,39 +1,40 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Track } from '../models/track.model';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TrackService {
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:8080/api/tracks';
 
-  tracks = signal<Track[]>([]);
-  status = signal<'loading' | 'error' | 'success'>('success');
+  loadTracks(): Observable<Track[]> {
+    return this.http.get<Track[]>(this.API_URL);
+  }
 
-loadTracks() {
-  return this.http.get<Track[]>(this.API_URL);
-}
-  addTrack(track: Track) {
+  updateTrack(id: string, track: Track): Observable<Track> {
+    const params = new HttpParams()
+      .set('title', track.title)
+      .set('artist', track.artist)
+      .set('category', track.category)
+      .set('description', track.description || '');
+
+    return this.http.put<Track>(`${this.API_URL}/${id}`, null, { params });
+  }
+
+  deleteTrack(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
+  addTrack(track: any): Observable<Track> {
     const formData = new FormData();
-    formData.append('file', track.blob);
+    formData.append('file', track.file);
     formData.append('title', track.title);
     formData.append('artist', track.artist);
     formData.append('category', track.category);
     formData.append('description', track.description || '');
-    formData.append('duration', String(track.duration)); // Fix TS2769
+    formData.append('duration', track.duration);
 
-    this.http.post<Track>(this.API_URL, formData).subscribe(newTrack => {
-      this.tracks.update(prev => [...prev, newTrack]);
-    });
-  }
-
-  deleteTrack(id: string) {
-    this.http.delete(`${this.API_URL}/${id}`).subscribe(() => {
-      this.tracks.update(prev => prev.filter(t => t.id !== id));
-    });
-  }
-
-  updateTrack(track: Track) {
-    console.log('Update logic to be implemented');
+    return this.http.post<Track>(this.API_URL, formData);
   }
 }
