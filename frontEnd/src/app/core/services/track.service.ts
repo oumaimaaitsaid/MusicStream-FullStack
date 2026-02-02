@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class TrackService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:8080/api/tracks';
+  private readonly API_URL = 'http://localhost:8081/api/tracks';
 
   loadTracks(): Observable<Track[]> {
     return this.http.get<Track[]>(this.API_URL);

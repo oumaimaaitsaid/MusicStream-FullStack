@@ -24,7 +24,10 @@ export const trackReducer = createReducer(
     tracks,
     loading: false
   })),
-
+on(TrackActions.addTrackSuccess, (state, { track }) => ({
+  ...state,
+  tracks: [...state.tracks, track]
+})),
  on(TrackActions.updateTrackSuccess, (state, { track }) => ({
    ...state,
    tracks: state.tracks.map(t => t.id === track.id ? track : t)

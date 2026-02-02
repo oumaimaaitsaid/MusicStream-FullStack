@@ -1,10 +1,12 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { Track } from '../models/track.model';
-import { TrackService } from './track.service';
+import { Store } from '@ngrx/store';
+import { selectAllTracks } from '../../store/tracks/track.selectors';
+import { take } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AudioPlayerService {
-  private trackService = inject(TrackService);
+  private store = inject(Store);
   private audio = new Audio();
 
   state = signal<'playing' | 'paused' | 'stopped' | 'buffering'>('stopped');
@@ -26,17 +28,14 @@ export class AudioPlayerService {
       this.currentTrack.set(track);
 
       try {
-        // Hna khass t-koun atob 7it Spring kiy-sift Base64
         const binaryString = atob(track.audioData as any);
         const bytes = new Uint8Array(binaryString.length);
         for (let i = 0; i < binaryString.length; i++) {
           bytes[i] = binaryString.charCodeAt(i);
         }
 
-        // Fix syntaxe : nssiti l-fasila bin [bytes] o {type...}
         const blob = new Blob([bytes], { type: 'audio/mpeg' });
 
-        // Nettoyage de l'ancienne URL pour éviter les fuites mémoire
         if (this.audio.src) URL.revokeObjectURL(this.audio.src);
 
         const url = URL.createObjectURL(blob);
@@ -47,7 +46,6 @@ export class AudioPlayerService {
       }
     }
 
-    // Had l-lines khasshoum y-kounou d-dakhel l-méthode play
     this.audio.play();
     this.state.set('playing');
   }
@@ -57,21 +55,23 @@ export class AudioPlayerService {
     this.state.set('paused');
   }
 
-  next() {
-    const list = this.trackService.tracks();
-    const index = list.findIndex(t => t.id === this.currentTrack()?.id);
-    if (index < list.length - 1) {
-      this.play(list[index + 1]);
-    }
-  }
+ next() {
+     this.store.select(selectAllTracks).pipe(take(1)).subscribe(list => {
+       const index = list.findIndex(t => t.id === this.currentTrack()?.id);
+       if (index !== -1 && index < list.length - 1) {
+         this.play(list[index + 1]);
+       }
+     });
+   }
 
   previous() {
-    const list = this.trackService.tracks();
-    const index = list.findIndex(t => t.id === this.currentTrack()?.id);
-    if (index > 0) {
-      this.play(list[index - 1]);
+      this.store.select(selectAllTracks).pipe(take(1)).subscribe(list => {
+        const index = list.findIndex(t => t.id === this.currentTrack()?.id);
+        if (index > 0) {
+          this.play(list[index - 1]);
+        }
+      });
     }
-  }
 
   seekTo(time: number) {
     this.audio.currentTime = time;

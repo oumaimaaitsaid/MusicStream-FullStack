@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { TrackService } from '../../core/services/track.service';
 import { Track } from '../../core/models/track.model';
+import { Store } from '@ngrx/store';
+import * as TrackActions from '../../store/tracks/track.actions';
 
 @Component({
   standalone: true,
@@ -12,7 +14,7 @@ import { Track } from '../../core/models/track.model';
 })
 export class TrackFormComponent {
   private fb = inject(FormBuilder);
-  private trackService = inject(TrackService);
+  private store = inject(Store);
 
   selectedFile: File | null = null;
   errorMsg = signal<string | null>(null);
@@ -47,28 +49,26 @@ export class TrackFormComponent {
   });
 }
   async onSubmit() {
-    if (this.musicForm.valid && this.selectedFile) {
-      const durationInSeconds = await this.getAudioDuration(this.selectedFile);
+      if (this.musicForm.valid && this.selectedFile) {
+        const durationInSeconds = await this.getAudioDuration(this.selectedFile);
+        const minutes = Math.floor(durationInSeconds / 60);
+        const seconds = durationInSeconds % 60;
+        const durationStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-      const minutes = Math.floor(durationInSeconds / 60);
-      const seconds = durationInSeconds % 60;
-      const durationStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        const trackToUpload = {
+          file: this.selectedFile,
+          title: this.musicForm.value.title!,
+          artist: this.musicForm.value.artist!,
+          category: this.musicForm.value.category!,
+          description: this.musicForm.value.description || '',
+          duration: durationStr
+        };
 
-      const newTrack: Track = {
-        id: crypto.randomUUID(),
-        title: this.musicForm.value.title!,
-        artist: this.musicForm.value.artist!,
-        category: this.musicForm.value.category as any,
-        description: this.musicForm.value.description || '',
-        addedDate: new Date(),
-        duration: durationStr,
-        blob: this.selectedFile
-      };
+        this.store.dispatch(TrackActions.addTrack({ track: trackToUpload }));
 
-      await this.trackService.addTrack(newTrack);
-      alert("Musique ajoutée avec succès !");
-      this.musicForm.reset();
-      this.selectedFile = null;
+        alert("Upload lancé !");
+        this.musicForm.reset();
+        this.selectedFile = null;
+      }
     }
   }
-}

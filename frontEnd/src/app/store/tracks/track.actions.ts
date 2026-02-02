@@ -12,7 +12,8 @@ export const loadTracksFailure = createAction(
   '[Track] Load Tracks Failure',
   props<{ error: any }>()
 );
-
+export const addTrack = createAction('[Track] Add Track', props<{ track: any }>());
+export const addTrackSuccess = createAction('[Track] Add Track Success', props<{ track: Track }>());
 
 export const updateTrack = createAction('[Track] Update Track', props<{ id: string; trackData: any }>());
 export const updateTrackSuccess = createAction('[Track] Update Track Success', props<{ track: Track }>());
