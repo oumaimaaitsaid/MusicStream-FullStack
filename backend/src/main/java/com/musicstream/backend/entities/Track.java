@@ -26,7 +26,8 @@ public class Track {
     private LocalDateTime addedDate;
 
     @Lob
-    @Column(columnDefinition = "LONGBLOB")
+    @org.hibernate.annotations.JdbcType(org.hibernate.type.descriptor.jdbc.VarbinaryJdbcType.class)
+    @Column(name = "audio_data", columnDefinition = "bytea")
     private byte[] audioData;
 
     private String fileName;
